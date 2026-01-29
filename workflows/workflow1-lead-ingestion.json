@@ -86,7 +86,7 @@
       "credentials": {
         "postgres": {
           "id": "CYRJjLgS4qso7Pcu",
-          "name": "Postgres account 2"
+          "name": "Postgres"
         }
       }
     }
