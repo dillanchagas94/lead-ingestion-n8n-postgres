@@ -1,6 +1,6 @@
 ## 📸 Workflow Screenshot
 
-![Workflow 1](screenshots/workflow1+postgre.png)
+![Workflow 1](workflow1+postgre.png)
 
 # 🚀 Lead Ingestion Automation (n8n + PostgreSQL)
 
