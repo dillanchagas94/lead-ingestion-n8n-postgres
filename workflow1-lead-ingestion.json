@@ -1,0 +1,150 @@
+{
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "triggerAtMinute": 15
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        0,
+        0
+      ],
+      "id": "8b42c3a2-4978-4d38-bb4c-242493ca5283",
+      "name": "Schedule Trigger",
+      "alwaysOutputData": false
+    },
+    {
+      "parameters": {
+        "url": "https://jsonplaceholder.typicode.com/users",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        208,
+        0
+      ],
+      "id": "5a400517-ae74-4179-9055-fa9e151266ba",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "7f696523-b746-44db-b5e0-eb3c53189de6",
+              "name": "lead_id",
+              "value": "={{ $json.id }}",
+              "type": "string"
+            },
+            {
+              "id": "fb2555d3-0454-49bc-9708-6cf5c19942f0",
+              "name": "email",
+              "value": "={{ $json.email }}",
+              "type": "string"
+            },
+            {
+              "id": "eec0f7a0-5bab-4e46-9a49-ffcd8e83be7e",
+              "name": "created_at",
+              "value": "={{ $('Schedule Trigger').item.json.timestamp }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        416,
+        0
+      ],
+      "id": "d63dc0cb-830b-4563-ba4f-6fd616375c85",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "INSERT INTO leads (lead_id, email, created_at)\nVALUES (\n  '{{$json[\"lead_id\"]}}',\n  '{{$json[\"email\"]}}',\n  to_timestamp('{{$json[\"created_at\"]}}','YYYY-MM-DD\"T\"HH24:MI:SS.MS')\n)\nON CONFLICT (lead_id)\nDO UPDATE SET\n  email = EXCLUDED.email,\n  created_at = EXCLUDED.created_at;\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        624,
+        0
+      ],
+      "id": "7733d85d-1465-4663-94db-847d93c6013a",
+      "name": "Execute a SQL query",
+      "credentials": {
+        "postgres": {
+          "id": "CYRJjLgS4qso7Pcu",
+          "name": "Postgres account 2"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Execute a SQL query",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {
+    "Schedule Trigger": [
+      {
+        "timestamp": "2026-01-29T12:52:24.289-05:00",
+        "Readable date": "January 29th 2026, 17:56:24 pm",
+        "Readable time": "12:52:24 pm",
+        "Day of week": "Thursday",
+        "Year": "2026",
+        "Month": "January",
+        "Day of month": "29",
+        "Hour": "12",
+        "Minute": "52",
+        "Second": "24",
+        "Timezone": "Western European Time/Lisbon (UTC +0)"
+      }
+    ]
+  },
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "bc444c2eb0272eed2481beb5cfa8858350ffdff21c5c2b13e3aa5459438fba55"
+  }
+}
