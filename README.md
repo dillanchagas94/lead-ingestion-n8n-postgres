@@ -1,3 +1,7 @@
+## 📸 Workflow Screenshot
+
+![Workflow 1](screenshots/workflow1+postgre.png)
+
 # 🚀 Lead Ingestion Automation (n8n + PostgreSQL)
 
 This project is the first workflow of a larger system called **Automated Revenue & Operations Monitor**.
